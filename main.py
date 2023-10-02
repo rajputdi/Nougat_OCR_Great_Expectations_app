@@ -1,5 +1,5 @@
 import streamlit as st
-from modules import uploader
+from modules import Uploader
 
 
 def main():
