@@ -1,5 +1,5 @@
 import streamlit as st
-from modules import uploader, report_selector
+from modules import Uploader, report_selector
 
 
 def main():
