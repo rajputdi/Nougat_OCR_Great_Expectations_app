@@ -1,4 +1,5 @@
 import great_expectations as ge
+from great_expectations.core.expectation_configuration import ExpectationConfiguration
 
 
 def initialize_expectations():
@@ -21,12 +22,11 @@ def set_credit_score_expectation(suite):
     """
     Set the expectation for the Credit Score column.
     """
-    expectation_configuration = {
-        "expectation_type": "expect_column_values_to_be_between",
-        "kwargs": {"column": "Credit Score", "min_value": 300, "max_value": 850},
-    }
+    expectation_configuration = ExpectationConfiguration(
+        expectation_type="expect_column_values_to_be_between",
+        kwargs={"column": "Credit Score", "min_value": 300, "max_value": 850},
+    )
 
-    # Accessing the dictionary key correctly
     suite.add_expectation(expectation_configuration)
 
 
