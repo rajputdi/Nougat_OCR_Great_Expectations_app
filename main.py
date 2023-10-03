@@ -18,13 +18,14 @@ def main():
     if uploaded_file:
         df = data_processor.process_txt(uploaded_file, report_choice)
 
-        # Generate and display profiling report
-        html_report = data_validator.generate_profiling_report(df)
-        st.markdown(html_report, unsafe_allow_html=True)
-
-        # Add a button to preview the corrected data
+        # Display the dataframe (Top 50 rows) if the "View Data" button is clicked
         if st.button("View Data"):
-            st.dataframe(df.head(50))  # Display top 50 rows upon button click
+            st.dataframe(df.head(50))
+
+        # Generate and display the GE profiling report if the respective button is clicked
+        if st.button("View GE Profiling Report"):
+            html_report = data_validator.generate_profiling_report(df)
+            st.markdown(html_report, unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
