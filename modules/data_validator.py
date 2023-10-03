@@ -3,65 +3,37 @@ from great_expectations.core.expectation_configuration import ExpectationConfigu
 
 
 def initialize_expectations():
-    """
-    Initialize the expectation suite for the loan data.
-    """
     context = ge.data_context.DataContext()
-
-    # Try to get the existing suite. If not, create a new one.
     try:
         suite = context.get_expectation_suite("loan_data_expectations")
     except ge.exceptions.exceptions.DataContextError:
         suite = context.create_expectation_suite("loan_data_expectations")
         context.save_expectation_suite(suite)
-
     return suite
 
 
 def set_credit_score_expectation(suite):
-    """
-    Set the expectation for the Credit Score column.
-    """
     expectation_configuration = ExpectationConfiguration(
         expectation_type="expect_column_values_to_be_between",
         kwargs={"column": "Credit Score", "min_value": 300, "max_value": 850},
     )
-
     suite.add_expectation(expectation_configuration)
 
 
-def validate_data(df):
-    """
-    Validate the dataframe against the defined expectation suite.
-    """
-    context = ge.data_context.DataContext()
-    suite = context.get_expectation_suite("loan_data_expectations")
-
-    # If the suite is empty (first run), initialize expectations
-    if not suite.expectations:
-        suite = initialize_expectations()
-        set_credit_score_expectation(suite)
-
-    ge_df = ge.from_pandas(df)
-    results = ge_df.validate(expectation_suite=suite)
-
-    return results
-
-
 def generate_profiling_report(df):
-    """
-    Generate a data profiling report for the provided dataframe.
-    """
     context = ge.data_context.DataContext()
     suite = context.get_expectation_suite("loan_data_expectations")
     ge_df = ge.from_pandas(df)
-    results = ge_df.validate(expectation_suite=suite)
 
-    # Render the results in an HTML format
-    html_report = (
-        ge.data_context.DataContext()
-        .build_data_docs()[0]["local_site"]["site_index_builder"]
-        .build()["full_static_asset_html_paths"][0]
+    batch_kwargs = {"dataset": ge_df, "datasource": "pandas_datasource"}
+    batch = context.get_batch(batch_kwargs, suite)
+    results = context.run_validation_operator(
+        "action_list_operator", assets_to_validate=[batch]
     )
-
-    return html_report
+    validation_results_dict = results.results[batch.batch_id][
+        "expectation_suite_results"
+    ]
+    document = context.build_data_docs(resource_identifiers=[validation_results_dict])
+    site_keys = list(context.get_config().data_docs_sites.keys())
+    html_url = document[site_keys[0]]
+    return html_url
