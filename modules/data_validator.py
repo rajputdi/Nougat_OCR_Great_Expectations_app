@@ -6,8 +6,14 @@ def initialize_expectations():
     Initialize the expectation suite for the loan data.
     """
     context = ge.data_context.DataContext()
-    suite = context.create_expectation_suite("loan_data_expectations")
-    context.save_expectation_suite(suite)
+
+    # Try to get the existing suite. If not, create a new one.
+    try:
+        suite = context.get_expectation_suite("loan_data_expectations")
+    except ge.exceptions.exceptions.DataContextError:
+        suite = context.create_expectation_suite("loan_data_expectations")
+        context.save_expectation_suite(suite)
+
     return suite
 
 

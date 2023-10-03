@@ -1,11 +1,5 @@
 import streamlit as st
-from modules import (
-    Uploader,
-    report_selector,
-    data_processor,
-    data_validator,
-    data_corrector,
-)
+from modules import Uploader, report_selector, data_processor, data_validator
 
 
 def main():
@@ -17,6 +11,10 @@ def main():
 
     if uploaded_file:
         df = data_processor.process_txt(uploaded_file, report_choice)
+
+        # Initialize and set expectations before generating the report
+        suite = data_validator.initialize_expectations()
+        data_validator.set_credit_score_expectation(suite)
 
         # Display the dataframe (Top 50 rows) if the "View Data" button is clicked
         if st.button("View Data"):
