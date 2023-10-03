@@ -27,8 +27,12 @@ def main():
     st.write("Upload a file for this session:")
     uploaded_file = Uploader.file_uploader()
 
+    report_type = st.radio(
+        "Choose type of report", ["Origination Report", "Monthly Performance Report"]
+    )
+
     if uploaded_file:
-        df = data_processor.process_txt(uploaded_file)
+        df = data_processor.process_txt(uploaded_file, report_type)
 
         # Display the dataframe (Top 50 rows) if the "View Data" button is clicked
         if st.button("View Data"):
