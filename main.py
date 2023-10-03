@@ -1,12 +1,12 @@
 import streamlit as st
-from modules import uploader, report_selector, data_processor
+from modules import Uploader, report_selector, data_processor
 
 
 def main():
     st.title("Streamlit App")
 
     st.write("Upload a file for this session:")
-    uploaded_file = uploader.file_uploader()
+    uploaded_file = Uploader.file_uploader()
 
     report_choice = report_selector.select_report_type()
 
