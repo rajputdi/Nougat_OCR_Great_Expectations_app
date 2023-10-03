@@ -10,10 +10,13 @@ def main():
 
     report_choice = report_selector.select_report_type()
 
-    # Process and display the data
+    # Process the data
     if uploaded_file:
-        df = data_processor.process_txt(uploaded_file)
-        st.dataframe(df.head(50))  # Display top 50 rows
+        df = data_processor.process_txt(uploaded_file, report_choice)
+
+        # Add a button to preview the data
+        if st.button("View Data"):
+            st.dataframe(df.head(50))  # Display top 50 rows upon button click
 
 
 if __name__ == "__main__":
