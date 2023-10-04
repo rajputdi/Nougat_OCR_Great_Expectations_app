@@ -9,7 +9,7 @@ def set_schema_expectations(df):
 
     # Check the types of columns
     df.expect_column_values_to_be_of_type("Credit Score", "int")
-    df.expect_column_values_to_be_of_type("First Payment Date", "datetime")
+    df.expect_column_values_to_be_of_type("First Payment Date", "int")
     # ... add other type checks as needed
 
 
