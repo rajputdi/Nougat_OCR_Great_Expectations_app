@@ -1,7 +1,7 @@
 import streamlit as st
-from modules import Uploader, data_processor, data_validator as dv
-from ydata_profiling import ProfileReport
-from modules.data_validator import create_data_context_in_memory, set_expectations
+from modules import Uploader, data_processor
+
+# ... other imports ...
 
 
 def main():
@@ -20,17 +20,19 @@ def main():
         # Display the dataframe (Top 50 rows) if the "View Data" button is clicked
         if st.button("View Data"):
             st.dataframe(df.head(50))
-        if st.button("Generate Data Summary"):
-            # Generate the report
-            report = ProfileReport(
-                df, title="Data Summary using ydata-profiling", minimal=True
-            )
-        if st.button("Validate with Great Expectations"):
-            context = create_data_context_in_memory()
-            results = set_expectations(df, context)
 
-    # Display results
-    st.write(results)
+        if st.button("Generate Data Summary"):
+            with st.spinner("Generating report..."):
+                report = data_processor.generate_profiling_report(df)
+            html = report.to_html()
+            st.success("Report generated!")
+
+            st.download_button(
+                label="Download Data Summary Report",
+                data=html.encode("utf-8"),
+                file_name="data_summary.html",
+                mime="text/html",
+            )
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 import pandas as pd
 import streamlit as st
+from ydata_profiling import ProfileReport
 
 
 def process_txt(file, report_type):
@@ -82,3 +83,8 @@ def process_txt(file, report_type):
     df = pd.read_csv(file, delimiter="|", header=None, names=column_names)
 
     return df
+
+
+def generate_profiling_report(df):
+    report = ProfileReport(df, title="Data Summary using ydata-profiling", minimal=True)
+    return report

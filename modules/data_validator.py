@@ -1,60 +1,53 @@
-# data_validator.py
-
 import great_expectations as ge
+from great_expectations.dataset import PandasDataset
+from great_expectations.data_context import BaseDataContext
+from great_expectations.data_context.types.base import DataContextConfig
 
 
-def create_data_context_in_memory():
-    """
-    Create a Great Expectations DataContext in memory.
-    """
-    context = ge.data_context.BaseDataContext(
-        project_config={
-            "datasources": {
-                "pandas_datasource": {
-                    "data_asset_type": {"class_name": "PandasDataset"},
-                    "class_name": "PandasDatasource",
-                    "batch_kwargs_generators": {},
-                }
-            },
-            "stores": {
-                "expectations_store": {"class_name": "InMemoryStoreBackend"},
-                "validations_store": {"class_name": "InMemoryStoreBackend"},
-            },
-            "expectation_suite_store": {"class_name": "InMemoryStoreBackend"},
-            "validation_operators": {
-                "action_list_operator": {
-                    "class_name": "ActionListValidationOperator",
-                    "action_list": [],
-                }
-            },
-        }
-    )
+def get_or_create_expectation_suite(context, suite_name):
+    try:
+        # Try to load existing suite
+        suite = context.get_expectation_suite(suite_name=suite_name)
+    except Exception as e:
+        # If not found, create a new one
+        suite = context.create_expectation_suite(expectation_suite_name=suite_name)
+    return suite
+
+
+def initialize_ge_context():
+    context = ge.data_context.BaseDataContext()
+
+    # Ensure the datasource is set up
+    context.add_datasource(name="my_pandas_datasource", class_name="PandasDatasource")
     return context
 
 
-# data_validator.py continued...
+def set_or_update_expectations(df):
+    context = initialize_ge_context()
+    suite_name = "loan_data_expectations"
+    suite = get_or_create_expectation_suite(context, suite_name)
 
+    # Wrap the dataframe in a Great Expectations dataset
+    ge_df = PandasDataset(df)
 
-def set_expectations(data_frame, context):
-    """
-    Set expectations on the dataframe using Great Expectations.
-    """
-    suite = context.create_expectation_suite(
-        expectation_suite_name="suite_name", overwrite_existing=True
+    # Set Expectation
+    ge_df.expect_column_values_to_be_between(
+        "Credit Score", min_value=300, max_value=850, mostly=0.99
     )
 
-    # Add an expectation
-    context.add_expectation(
-        expectation_suite_name="suite_name",
-        expectation_configuration={
-            "expectation_type": "expect_column_values_to_be_between",
-            "kwargs": {"column": "Credit Score", "min_value": 300, "max_value": 850},
-        },
-    )
+    # ... add more expectations as needed ...
 
-    batch = context.get_batch({"pandas_datasource": data_frame}, "suite_name")
+    # Save updated suite
+    context.save_expectation_suite(expectation_suite=suite, suite_name=suite_name)
 
+    return ge_df
+
+
+def validate_data(df):
+    context = initialize_ge_context()
+    suite_name = "loan_data_expectations"
+    suite = get_or_create_expectation_suite(context, suite_name)
     results = context.run_validation_operator(
-        "action_list_operator", assets_to_validate=[batch]
+        "action_list_operator", assets_to_validate=[(df, suite_name)]
     )
     return results
