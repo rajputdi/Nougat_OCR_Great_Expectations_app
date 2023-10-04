@@ -44,6 +44,7 @@ def main():
         # Display the validation results or take some action based on them
         if validation_results["success"]:
             st.write("Dataframe validation passed!")
+            st.write(expectation_result, "/n")
         else:
             st.write("Dataframe validation failed!")
 
