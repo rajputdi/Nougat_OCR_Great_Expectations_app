@@ -18,7 +18,7 @@ def initialize_ge_context():
         evaluation_parameter_store_name="evaluation_parameter_store",
     )
 
-    context = ge.data_context.DataContext(project_config=data_context_config)
+    context = ge.data_context.DataContext(config=data_context_config)
     return context
 
 
