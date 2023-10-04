@@ -20,11 +20,10 @@ def main():
         if st.button("View Data"):
             st.dataframe(df.head(50))
         if st.button("Generate Data Summary"):
-            with st.spinner("Generating YData Summary..."):
-                # Generate the report
-                report = ProfileReport(
-                    df, title="Data Summary using ydata-profiling", minimal=True
-                )
+            # Generate the report
+            report = ProfileReport(
+                df, title="Data Summary using ydata-profiling", minimal=True
+            )
         report.to_file("report.html")
         with open("report.html", "r") as f:
             html_string = f.read()
