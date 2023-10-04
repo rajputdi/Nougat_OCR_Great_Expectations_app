@@ -1,5 +1,6 @@
 import streamlit as st
 from modules import Uploader, data_processor, data_validator
+from ydata_profiling import ProfileReport
 
 
 def display_validation_results(df):
@@ -37,6 +38,12 @@ def main():
         # Display the dataframe (Top 50 rows) if the "View Data" button is clicked
         if st.button("View Data"):
             st.dataframe(df.head(50))
+        if st.button("Generate Data Summary"):
+            # Generate the report
+            report = ProfileReport(
+                df, title="Data Summary using ydata-profiling", minimal=True
+            )
+            st.st_profile_report(report)
 
         # Validate the data and display the results
         if st.button("Validate Data"):
