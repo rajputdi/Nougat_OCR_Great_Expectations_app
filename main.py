@@ -43,7 +43,17 @@ def main():
             report = ProfileReport(
                 df, title="Data Summary using ydata-profiling", minimal=True
             )
-            st.st_profile_report(report)
+            # st.st_profile_report(report)
+        report.to_file("report.html")
+        with open("report.html", "r") as f:
+            html_string = f.read()
+
+        st.download_button(
+            label="Download Report",
+            data=html_string.encode("utf-8"),
+            file_name="data_summary_report.html",
+            mime="text/html",
+        )
 
         # Validate the data and display the results
         if st.button("Validate Data"):
