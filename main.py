@@ -1,6 +1,7 @@
 import streamlit as st
 from modules import Uploader, data_processor, data_validator as dv
 from ydata_profiling import ProfileReport
+from modules.data_validator import create_data_context_in_memory, set_expectations
 
 
 def main():
@@ -25,27 +26,10 @@ def main():
                 df, title="Data Summary using ydata-profiling", minimal=True
             )
         if st.button("Validate with Great Expectations"):
-            # Initialize Great Expectations context
-            context = dv.initialize_ge_context()
+            context = create_data_context_in_memory()
+            results = set_expectations(df, context)
 
-            # Set or update expectations
-            dv.set_or_update_expectations(context)
-
-            # Validate the data
-            batch = context.get_batch(
-                {
-                    "batch_kwargs": {
-                        "datasource": "my_datasource",
-                        "dataset": df,
-                        "data_asset_name": "uploaded_data",
-                    },
-                    "expectation_suite_name": "default_suite",
-                }
-            )
-    results = batch.validate()
-
-    # Display validation results
-    st.subheader("Validation Results")
+    # Display results
     st.write(results)
 
 

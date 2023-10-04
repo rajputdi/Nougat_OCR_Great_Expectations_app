@@ -1,64 +1,60 @@
+# data_validator.py
+
 import great_expectations as ge
-from great_expectations.data_context.types.base import DataContextConfig
 
 
-def initialize_ge_context():
+def create_data_context_in_memory():
     """
-    Initialize a GE DataContext and return it.
+    Create a Great Expectations DataContext in memory.
     """
-    data_context_config = DataContextConfig(
-        datasources={
-            "my_datasource": {
-                "class_name": "PandasDatasource",
-                "module_name": "great_expectations.datasource",
-                "batch_kwargs_generators": {},
-            }
-        },
-        stores={
-            "expectations_store": {
-                "class_name": "ExpectationsStore",
-                "store_backend": {
-                    "class_name": "TupleFilesystemStoreBackend",
-                    "base_directory": "/tmp/expectations/",
-                },
+    context = ge.data_context.BaseDataContext(
+        project_config={
+            "datasources": {
+                "pandas_datasource": {
+                    "data_asset_type": {"class_name": "PandasDataset"},
+                    "class_name": "PandasDatasource",
+                    "batch_kwargs_generators": {},
+                }
             },
-            "validations_store": {
-                "class_name": "ValidationsStore",
-                "store_backend": {
-                    "class_name": "TupleFilesystemStoreBackend",
-                    "base_directory": "/tmp/validations/",
-                },
+            "stores": {
+                "expectations_store": {"class_name": "InMemoryStoreBackend"},
+                "validations_store": {"class_name": "InMemoryStoreBackend"},
             },
-        },
-        expectations_store_name="expectations_store",
-        validations_store_name="validations_store",
-        data_asset_type={
-            "module_name": "great_expectations.dataset",
-            "class_name": "PandasDataset",
-        },
+            "expectation_suite_store": {"class_name": "InMemoryStoreBackend"},
+            "validation_operators": {
+                "action_list_operator": {
+                    "class_name": "ActionListValidationOperator",
+                    "action_list": [],
+                }
+            },
+        }
     )
-
-    context = ge.data_context.BaseDataContext(project_config=data_context_config)
     return context
 
 
-def set_or_update_expectations(context, expectation_suite_name="default_suite"):
+# data_validator.py continued...
+
+
+def set_expectations(data_frame, context):
     """
-    Set or update the expectations for the given context.
+    Set expectations on the dataframe using Great Expectations.
     """
-    suite = context.get_expectation_suite(
-        expectation_suite_name, create_if_not_exist=True
+    suite = context.create_expectation_suite(
+        expectation_suite_name="suite_name", overwrite_existing=True
     )
 
-    # Example expectation
-    suite.add_expectation(
-        {
+    # Add an expectation
+    context.add_expectation(
+        expectation_suite_name="suite_name",
+        expectation_configuration={
             "expectation_type": "expect_column_values_to_be_between",
             "kwargs": {"column": "Credit Score", "min_value": 300, "max_value": 850},
-        }
+        },
     )
 
-    # ... add more expectations as needed ...
+    batch = context.get_batch({"pandas_datasource": data_frame}, "suite_name")
 
-    context.save_expectation_suite(suite)
-    return suite
+    results = context.run_validation_operator(
+        "action_list_operator", assets_to_validate=[batch]
+    )
+    return results
