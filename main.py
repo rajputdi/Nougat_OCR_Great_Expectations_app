@@ -48,7 +48,7 @@ def main():
             st.write("Dataframe validation failed!")
 
             st.write(validation_results, "/n")
-            st.write(expectation_result, "/n")
+    st.write(expectation_result, "/n")
 
 
 if __name__ == "__main__":
