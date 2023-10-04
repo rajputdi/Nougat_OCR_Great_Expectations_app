@@ -1,15 +1,10 @@
 import great_expectations as ge
-from great_expectations.data_context.types.base import (
-    DataContextConfig,
-    InMemoryStoreBackend,
-)
-
-# Your existing imports and functions (if any)...
+from great_expectations.data_context.types.base import DataContextConfig
 
 
 def initialize_ge_context():
     """
-    Initialize a GE DataContext in memory and return it.
+    Initialize a GE DataContext and return it.
     """
     data_context_config = DataContextConfig(
         datasources={
@@ -24,12 +19,6 @@ def initialize_ge_context():
     )
 
     context = ge.data_context.DataContext(project_config=data_context_config)
-
-    # Explicitly adding in-memory store backends to the context
-    context.stores["expectations_store"] = InMemoryStoreBackend()
-    context.stores["validations_store"] = InMemoryStoreBackend()
-    context.stores["evaluation_parameter_store"] = InMemoryStoreBackend()
-
     return context
 
 
