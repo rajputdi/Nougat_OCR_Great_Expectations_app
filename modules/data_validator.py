@@ -2,6 +2,7 @@
 import great_expectations as ge
 from great_expectations.data_context import BaseDataContext
 from great_expectations.data_context.types.base import DataContextConfig
+from great_expectations.core.expectation_suite import ExpectationSuite
 from great_expectations.data_context.types.resource_identifiers import (
     ExpectationSuiteIdentifier,
 )
@@ -52,6 +53,19 @@ def initialize_ge_context():
 
     context = BaseDataContext(project_config=project_config)
     return context
+
+
+def create_suite(context, suite_name):
+    """
+    Create a new expectation suite with the given suite_name.
+    If suite already exists, return the existing one.
+    """
+    try:
+        suite = context.get_expectation_suite(suite_name=suite_name)
+    except KeyError:  # suite not found
+        suite = ExpectationSuite(expectation_suite_name=suite_name)
+        context.save_expectation_suite(expectation_suite=suite)
+    return suite
 
 
 def set_or_update_expectations(context, df):
