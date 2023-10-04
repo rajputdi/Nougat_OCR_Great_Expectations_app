@@ -36,16 +36,15 @@ def main():
 
         # -->changes for great expectations
         if st.button("Validate Using GE"):
-            context = dv.initialize_ge_context()
-            suite_name = "loan_data_expectations"
-            dv.create_suite(context, suite_name)
-            results = dv.validate_data(df, context, suite_name)
+            # Validate the dataframe using Great Expectations
+            validation_results = dv.validate_dataframe(df)
 
-            # Display validation results
-            if results["success"]:
-                st.write("Data validated successfully!")
-            else:
-                st.write("Data validation failed!")
+        # Display the validation results or take some action based on them
+        if validation_results["success"]:
+            st.write("Dataframe validation passed!")
+        else:
+            st.write("Dataframe validation failed!")
+            st.write(validation_results)
 
 
 if __name__ == "__main__":
