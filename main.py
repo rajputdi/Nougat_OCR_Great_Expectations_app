@@ -1,5 +1,5 @@
 import streamlit as st
-from modules import Uploader, data_processor
+from modules import Uploader, data_processor, data_validator as dv
 
 # ... other imports ...
 
@@ -33,6 +33,15 @@ def main():
                 file_name="data_summary.html",
                 mime="text/html",
             )
+
+        # -->changes for great expectations
+        # GE Validation
+        if st.button("Validate Data"):
+            results = dv.validate_data(df)
+            if results["success"]:
+                st.write("Data validated successfully!")
+            else:
+                st.write("Data validation failed!")
 
 
 if __name__ == "__main__":
