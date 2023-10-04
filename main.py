@@ -3,25 +3,6 @@ from modules import Uploader, data_processor, data_validator
 from ydata_profiling import ProfileReport
 
 
-def display_validation_results(df):
-    validation_results = data_validator.set_or_update_expectations(df)
-
-    # Extracting statistics from the validation results for display
-    for batch in validation_results["results"]:
-        batch_name = batch.batch_identifier["batch_identifier"]
-        expectation_results = (
-            batch.expectation_suite_validation_result.expectation_results
-        )
-
-        # Display the results in Streamlit
-        st.write(f"## Validation Results for {batch_name}")
-        for expectation_result in expectation_results:
-            st.write(expectation_result.expectation_config.expectation_type)
-            st.write("Success:", expectation_result.success)
-            if not expectation_result.success:
-                st.write("Details:", expectation_result.result)
-
-
 def main():
     st.title("Streamlit App with Great Expectations")
 
@@ -44,8 +25,6 @@ def main():
                 report = ProfileReport(
                     df, title="Data Summary using ydata-profiling", minimal=True
                 )
-
-        st.markdown(report.to_html(), unsafe_allow_html=True)
         report.to_file("report.html")
         with open("report.html", "r") as f:
             html_string = f.read()
@@ -56,10 +35,10 @@ def main():
             file_name="data_summary_report.html",
             mime="text/html",
         )
-
-        # Validate the data and display the results
-        if st.button("Validate Data"):
-            display_validation_results(df)
+        if st.button("Validate with Great Expectations"):
+            context = data_validator.initialize_ge_context()
+            validation_results = data_validator.validate_data_with_ge(context, df)
+            st.write(validation_results)
 
 
 if __name__ == "__main__":
