@@ -11,46 +11,54 @@ def initialize_ge_context():
             "my_datasource": {
                 "class_name": "PandasDatasource",
                 "module_name": "great_expectations.datasource",
+                "batch_kwargs_generators": {},
             }
+        },
+        stores={
+            "expectations_store": {
+                "class_name": "ExpectationsStore",
+                "store_backend": {
+                    "class_name": "TupleFilesystemStoreBackend",
+                    "base_directory": "/tmp/expectations/",
+                },
+            },
+            "validations_store": {
+                "class_name": "ValidationsStore",
+                "store_backend": {
+                    "class_name": "TupleFilesystemStoreBackend",
+                    "base_directory": "/tmp/validations/",
+                },
+            },
         },
         expectations_store_name="expectations_store",
         validations_store_name="validations_store",
-        evaluation_parameter_store_name="evaluation_parameter_store",
+        data_asset_type={
+            "module_name": "great_expectations.dataset",
+            "class_name": "PandasDataset",
+        },
     )
 
-    context = ge.data_context.DataContext(config=data_context_config)
+    context = ge.data_context.BaseDataContext(project_config=data_context_config)
     return context
 
 
-def validate_data_with_ge(context, dataframe, suite_name="default"):
+def set_or_update_expectations(context, expectation_suite_name="default_suite"):
     """
-    Validate the dataframe using Great Expectations and return the validation results.
+    Set or update the expectations for the given context.
     """
-    # Add the dataframe as the datasource
-    context.add_datasource(
-        "my_datasource", module_name="pandas", class_name="PandasDatasource"
+    suite = context.get_expectation_suite(
+        expectation_suite_name, create_if_not_exist=True
     )
 
-    batch_kwargs = {
-        "datasource": "my_datasource",
-        "data_connector": "default_inferred_data_connector_name",
-        "data_asset_name": "my_uploaded_data",
-    }
-
-    batch = context.get_batch(batch_kwargs, suite_name)
-
-    # Define expectations (this can be expanded)
-    batch.expect_column_values_to_be_between(
-        column="Credit Score", min_value=300, max_value=850
+    # Example expectation
+    suite.add_expectation(
+        {
+            "expectation_type": "expect_column_values_to_be_between",
+            "kwargs": {"column": "Credit Score", "min_value": 300, "max_value": 850},
+        }
     )
 
-    # ... Add more expectations as needed ...
+    # ... add more expectations as needed ...
 
-    # Validate
-    results = context.run_validation_operator(
-        "action_list_operator", assets_to_validate=[batch]
-    )
-    return results
-
-
-# Any other existing functions...
+    context.save_expectation_suite(suite)
+    return suite
