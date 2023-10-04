@@ -24,16 +24,6 @@ def main():
             report = ProfileReport(
                 df, title="Data Summary using ydata-profiling", minimal=True
             )
-        report.to_file("report.html")
-        with open("report.html", "r") as f:
-            html_string = f.read()
-
-        st.download_button(
-            label="Download Report",
-            data=html_string.encode("utf-8"),
-            file_name="data_summary_report.html",
-            mime="text/html",
-        )
         if st.button("Validate with Great Expectations"):
             context = data_validator.initialize_ge_context()
             validation_results = data_validator.validate_data_with_ge(context, df)
