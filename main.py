@@ -38,7 +38,7 @@ def main():
         # -->changes for great expectations
         if st.button("Validate Using GE"):
             # Validate the dataframe using Great Expectations
-            validation_results = dv.validate_dataframe(df)
+            validation_results, expectation_result = dv.validate_dataframe(df)
             ge_df = ge.from_pandas(df)
 
         # Display the validation results or take some action based on them
@@ -48,15 +48,7 @@ def main():
             st.write("Dataframe validation failed!")
 
             st.write(validation_results, "/n")
-
-        config = ge_df.get_expectations_config()
-
-        # Convert the config to an HTML string
-        html_content = data_exporter.convert_config_to_html(config)
-
-        # Generate a download link and display it in Streamlit
-        download_link = data_exporter.generate_download_link(html_content)
-        st.markdown(download_link, unsafe_allow_html=True)
+            st.write(expectation_result, "/n")
 
 
 if __name__ == "__main__":

@@ -19,9 +19,10 @@ def validate_dataframe(df):
 
     # First, set the schema expectations
     set_schema_expectations(ge_df)
+    # Fetch expectations
+    expectations = ge_df.get_expectation_suite(discard_failed_expectations=False)
 
-    # Then, validate the dataframe
-    results = ge_df.validate()
+    # Validate the dataframe
+    validation_results = ge_df.validate()
 
-    # Return the results for further use
-    return results
+    return validation_results, expectations
