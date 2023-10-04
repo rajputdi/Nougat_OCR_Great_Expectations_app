@@ -39,11 +39,13 @@ def main():
         if st.button("View Data"):
             st.dataframe(df.head(50))
         if st.button("Generate Data Summary"):
-            # Generate the report
-            report = ProfileReport(
-                df, title="Data Summary using ydata-profiling", minimal=True
-            )
-            # st.st_profile_report(report)
+            with st.spinner("Generating YData Summary..."):
+                # Generate the report
+                report = ProfileReport(
+                    df, title="Data Summary using ydata-profiling", minimal=True
+                )
+
+        st.markdown(report.to_html(), unsafe_allow_html=True)
         report.to_file("report.html")
         with open("report.html", "r") as f:
             html_string = f.read()
