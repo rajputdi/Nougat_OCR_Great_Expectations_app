@@ -58,7 +58,7 @@ def main():
             results = context.run_checkpoint(
                 checkpoint_name="fm_checkpoint_v1",
                 batch_request={
-                    "batch_data": ge_df,
+                    "batch_slice": ge_df,
                     "datasource_name": "my_pandas_datasource1",
                     "data_asset_name": "fm_dataframe",
                 },
