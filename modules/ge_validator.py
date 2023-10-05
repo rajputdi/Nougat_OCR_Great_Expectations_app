@@ -18,7 +18,7 @@ def initialize_ge_context():
 
 def add_expectations_to_default_suite(context, df):
     # Retrieve the default suite
-    suite = context.get_expectation_suite(suite_name="default")
+    suite = context.get_expectation_suite("default")
 
     # Convert df into a GE dataset
     ge_df = ge.from_pandas(df)
