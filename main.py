@@ -31,7 +31,7 @@ def main():
                 df, title="Data Summary using ydata-profiling", minimal=True
             )
         if st.button("Run Checkpoint"):
-            context = DataContext("great_expectations")
+            context = DataContext("gx")
             results = gv.run_checkpoint_on_df(df, context)
             st.write(results)
 
