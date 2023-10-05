@@ -46,9 +46,6 @@ def main():
             available_checkpoints = context.list_checkpoints()
             st.write(available_checkpoints)
 
-            checkpoint = Checkpoint(
-                name="fm_checkpoint_v1", data_context=context, **checkpoint_config
-            )
             results = gv.run_checkpoint_on_df(df, context)
             st.write(results)
 
