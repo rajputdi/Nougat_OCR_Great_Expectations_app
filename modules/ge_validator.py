@@ -16,7 +16,7 @@ def initialize_ge_context():
     return context
 
 
-def add_expectation_to_default_suite(context):
+def add_expectations_to_default_suite(context, df):
     """
     Add an expectation for the "Credit Score" column to the default suite.
     """
