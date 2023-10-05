@@ -22,18 +22,6 @@ def main():
         # Convert the DataFrame to a GE dataset
         ge_df = ge.from_pandas(df)
 
-        # Initialize the in-memory GE context
-        context = gv.initialize_ge_context()
-
-        # Add expectations
-        gv.add_expectations_to_default_suite(context, ge_df)
-
-        # Validate the dataframe and get results
-        validation_results = gv.validate_data_against_suite(context, ge_df)
-
-        # Display the validation results
-        st.json(validation_results)
-
         # Display the dataframe (Top 50 rows) if the "View Data" button is clicked
         if st.button("View Data"):
             st.dataframe(df.head(50))
