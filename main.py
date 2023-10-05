@@ -52,7 +52,7 @@ def main():
             suite = context.get_expectation_suite(
                 suite_name="freddie_mac_expectation_suite"
             )
-            results = ge_df.validate(expectation_suite=suite)
+            results = ge_df.validate(suite)
 
             # ge_df = ge.dataset.PandasDataset(df)
             # results = context.run_checkpoint(
