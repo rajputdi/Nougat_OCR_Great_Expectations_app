@@ -21,9 +21,8 @@ def get_in_memory_data_context():
     }
 
     temp_dir = tempfile.mkdtemp()
-    context = ge.data_context.DataContext(
-        context_root_dir=temp_dir, project_config=data_context_config
-    )
+    context = ge.data_context.DataContext(context_root_dir=temp_dir)
+    context._project_config = data_context_config
     return context
 
 
