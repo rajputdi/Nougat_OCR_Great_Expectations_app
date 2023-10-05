@@ -49,19 +49,19 @@ def main():
             retrieved_checkpoint = context.get_checkpoint(name="fm_checkpoint_v1")
             st.write(retrieved_checkpoint)
 
-            # ge_df = ge.dataset.PandasDataset(df)
+            ge_df = ge.dataset.PandasDataset(df)
             # results = context.run_checkpoint(
             #    checkpoint_name="fm_checkpoint_v1", batch_request={"batch_data": ge_df}
             # )
             # st.write(results)
 
-            results = retrieved_checkpoint.run(
+            results = context.run_checkpoint(
+                checkpoint_name="fm_checkpoint_v1",
                 batch_request={
                     "batch_data": ge_df,
                     "datasource_name": "my_pandas_datasource1",
                     "data_asset_name": "fm_dataframe",
-                    "expectation_suite_name": "freddie_mac_expectation_suite",
-                }
+                },
             )
 
 
