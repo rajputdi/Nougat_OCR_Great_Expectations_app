@@ -50,19 +50,15 @@ def main():
             st.write(retrieved_checkpoint)
 
             ge_df = ge.dataset.PandasDataset(df)
-            # results = context.run_checkpoint(
-            #    checkpoint_name="fm_checkpoint_v1", batch_request={"batch_data": ge_df}
-            # )
-            # st.write(results)
-
             results = context.run_checkpoint(
                 checkpoint_name="fm_checkpoint_v1",
                 batch_request={
-                    "batch_slice": ge_df,
+                    "batch_data": ge_df,
                     "datasource_name": "my_pandas_datasource1",
                     "data_asset_name": "fm_dataframe",
                 },
             )
+            st.write(results)
 
 
 if __name__ == "__main__":
