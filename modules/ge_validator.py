@@ -1,5 +1,6 @@
 import great_expectations as ge
 from great_expectations.data_context.types.base import DataContextConfig
+import tempfile
 
 
 def get_in_memory_data_context():
@@ -19,7 +20,10 @@ def get_in_memory_data_context():
         }
     }
 
-    context = ge.data_context.DataContext(config=data_context_config)
+    temp_dir = tempfile.mkdtemp()
+    context = ge.data_context.DataContext(
+        context_root_dir=temp_dir, project_config=data_context_config
+    )
     return context
 
 
