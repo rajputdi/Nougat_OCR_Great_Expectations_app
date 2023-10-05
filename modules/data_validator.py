@@ -1,4 +1,7 @@
 import great_expectations as ge
+from great_expectations.data_context import BaseDataContext
+import datetime
+import os
 
 
 def set_schema_expectations(df):
@@ -9,7 +12,7 @@ def set_schema_expectations(df):
 
     # Check the types of columns
     df.expect_column_values_to_be_of_type("Credit Score", "int")
-    df.expect_column_values_to_be_of_type("First Payment Date", "datetime")
+    df.expect_column_values_to_be_of_type("First Payment Date", "int")
     # ... add other type checks as needed
 
 
@@ -19,10 +22,28 @@ def validate_dataframe(df):
 
     # First, set the schema expectations
     set_schema_expectations(ge_df)
-    # Fetch expectations
-    expectations = ge_df.get_expectation_suite(discard_failed_expectations=False)
 
     # Validate the dataframe
-    validation_results = ge_df.validate()
+    results = ge_df.validate()
 
-    return validation_results, expectations
+    # Create a new data context
+    context = BaseDataContext()
+
+    # Save the suite and validation results
+    suite_name = "my_suite"
+    run_id = "batch_" + str(datetime.datetime.utcnow())
+    context.save_expectation_suite(expectation_suite=ge_df.get_expectation_suite())
+    context.save_validation_result(
+        validation_result=results, expectation_suite_name=suite_name, run_id=run_id
+    )
+
+    # Build Data Docs
+    context.build_data_docs()
+
+    # Get the Data Docs URL for the suite
+    local_site_url = context.get_docs_sites_urls(site_name="local_site")[0]["url"]
+    suite_url = os.path.join(
+        local_site_url, "validations", suite_name, run_id + ".html"
+    )
+
+    return suite_url

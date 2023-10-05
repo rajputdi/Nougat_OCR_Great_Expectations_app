@@ -40,16 +40,18 @@ def main():
             # Validate the dataframe using Great Expectations
             validation_results, expectation_result = dv.validate_dataframe(df)
             ge_df = ge.from_pandas(df)
-
+        if st.button("Generate Data Docs"):
+            suite_url = dv.validate_dataframe(df)
+            st.markdown(f"[View Data Docs]({suite_url})")
         # Display the validation results or take some action based on them
         if validation_results["success"]:
             st.write("Dataframe validation passed!")
-            st.write(expectation_result, "/n")
+            # st.write(expectation_result, "/n")
         else:
             st.write("Dataframe validation failed!")
 
-            st.write(validation_results, "/n")
-    st.write(expectation_result, "/n")
+        # st.write(validation_results, "/n")
+    # st.write(expectation_result, "/n")
 
 
 if __name__ == "__main__":
