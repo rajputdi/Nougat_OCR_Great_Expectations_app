@@ -46,11 +46,14 @@ def main():
             available_checkpoints = context.list_checkpoints()
             st.write(available_checkpoints)
 
+            available_suites = context.list_expectation_suites()
+            st.write(available_suites)
+
             retrieved_checkpoint = context.get_checkpoint(name="fm_checkpoint_v1")
             st.write(retrieved_checkpoint)
 
-            suite = context.get_expectation_suite("freddie_mac_expectation_suite")
-            results = ge_df.validate(expectation_suite=suite)
+            # suite = context.get_expectation_suite("freddie_mac_expectation_suite")
+            # results = ge_df.validate(expectation_suite=suite)
 
             # ge_df = ge.dataset.PandasDataset(df)
             # results = context.run_checkpoint(
