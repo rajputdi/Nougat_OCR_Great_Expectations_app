@@ -53,6 +53,11 @@ def main():
 
         # Validate the dataframe using GE and display results
         if st.button("Validate Data"):
+            # Initialize the ephemeral data context
+            context = gv.get_ephemeral_data_context()
+
+            # Add expectation to default suite
+            gv.add_expectation_to_default_suite(context)
             results = gv.validate_dataframe(df)
             st.write(results)
 
