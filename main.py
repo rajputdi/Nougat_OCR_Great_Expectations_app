@@ -1,9 +1,7 @@
 import streamlit as st
-from modules import Uploader, data_processor, data_validator as dv, data_exporter
+from modules import Uploader, data_processor, ge_validator as gv
+from ydata_profiling import ProfileReport
 import great_expectations as ge
-from modules import ge_validator as gv
-
-# ... other imports ...
 
 
 def main():
@@ -19,55 +17,29 @@ def main():
     if uploaded_file:
         df = data_processor.process_txt(uploaded_file, report_type)
 
+        # Convert the DataFrame to a GE dataset
+        ge_df = ge.from_pandas(df)
+
+        # Initialize the in-memory GE context
+        context = gv.initialize_ge_context()
+
+        # Add expectations
+        gv.add_expectations_to_default_suite(context, ge_df)
+
+        # Validate the dataframe and get results
+        validation_results = gv.validate_data_against_suite(context, ge_df)
+
+        # Display the validation results
+        st.json(validation_results)
+
         # Display the dataframe (Top 50 rows) if the "View Data" button is clicked
         if st.button("View Data"):
             st.dataframe(df.head(50))
-
         if st.button("Generate Data Summary"):
-            with st.spinner("Generating report..."):
-                report = data_processor.generate_profiling_report(df)
-            html = report.to_html()
-            st.success("Report generated!")
-
-            st.download_button(
-                label="Download Data Summary Report",
-                data=html.encode("utf-8"),
-                file_name="data_summary.html",
-                mime="text/html",
+            # Generate the report
+            report = ProfileReport(
+                df, title="Data Summary using ydata-profiling", minimal=True
             )
-
-        # -->changes for great expectations
-        if st.button("Validate Using GE"):
-            # Validate the dataframe using Great Expectations
-            validation_results, expectation_result = dv.validate_dataframe(df)
-            ge_df = ge.from_pandas(df)
-
-        if validation_results["success"]:
-            st.write("Dataframe validation passed!")
-            st.write(expectation_result, "\n")
-        else:
-            st.write("Dataframe validation failed!")
-            st.write(expectation_result, "\n")
-        # st.write(validation_results, "/n")
-        # st.write(expectation_result, "/n")
-
-        # Validate the dataframe using GE and display results
-        if st.button("Validate Data"):
-            # Initialize the ephemeral data context
-            context = gv.get_ephemeral_data_context()
-
-            # Add expectation to default suite
-            gv.add_expectation_to_default_suite(context)
-
-            results = gv.validate_dataframe(df)
-            st.write(results + "congratulations!")
-
-            # After adding expectation
-
-            validation_results = gv.validate_data_against_suite(context, ge_df)
-
-            # Display the results in your Streamlit app
-            st.json(validation_results)
 
 
 if __name__ == "__main__":
