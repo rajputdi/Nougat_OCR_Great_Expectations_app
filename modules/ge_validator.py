@@ -8,15 +8,11 @@ from great_expectations.data_context.types.base import (
 from great_expectations.data_context import EphemeralDataContext
 
 
-def get_ephemeral_data_context():
-    """
-    This function returns an ephemeral data context for Great Expectations.
-    """
+def initialize_ge_context():
     project_config = DataContextConfig(
         store_backend_defaults=InMemoryStoreBackendDefaults()
     )
     context = EphemeralDataContext(project_config=project_config)
-
     return context
 
 
@@ -47,7 +43,7 @@ def validate_dataframe(df):
     It returns the validation results.
     """
     # Convert the DataFrame to a GE dataset
-    ge_df = ge.from_pandas(df, data_context=get_ephemeral_data_context())
+    ge_df = ge.from_pandas(df, data_context=initialize_ge_context())
 
     # Validate the dataframe
     results = ge_df.validate()
