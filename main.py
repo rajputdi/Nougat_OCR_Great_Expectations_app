@@ -45,7 +45,7 @@ def main():
                 suite_data = json.load(file)
 
             # Convert the dictionary to an ExpectationSuite
-            suite = ExpectationSuite.from_dict(suite_data)
+            suite = ExpectationSuite(suite_data)
 
             # Add the suite to the context
             context.save_expectation_suite(suite, "freddie_mac_expectation_suite")
