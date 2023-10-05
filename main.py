@@ -46,11 +46,14 @@ def main():
             available_checkpoints = context.list_checkpoints()
             st.write(available_checkpoints)
 
-            ge_df = ge.dataset.PandasDataset(df)
-            results = context.run_checkpoint(
-                checkpoint_name="fm_checkpoint_v1", batch_request={"batch_data": ge_df}
-            )
-            st.write(results)
+            retrieved_checkpoint = context.get_checkpoint(name="fm_checkpoint_v1")
+            st.write(retrieved_checkpoint)
+
+            # ge_df = ge.dataset.PandasDataset(df)
+            # results = context.run_checkpoint(
+            #  checkpoint_name="fm_checkpoint_v1", batch_request={"batch_data": ge_df}
+            # )
+            # st.write(results)
 
 
 if __name__ == "__main__":
