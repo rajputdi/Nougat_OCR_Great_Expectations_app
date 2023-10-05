@@ -51,8 +51,7 @@ def main():
 
             ge_df = ge.dataset.PandasDataset(df)
             results = context.run_checkpoint(
-                checkpoint_name=retrieved_checkpoint,
-                batch_request={"batch_data": ge_df},
+                checkpoint_name="fm_checkpoint_v1", batch_request={"batch_data": ge_df}
             )
             st.write(results)
 
