@@ -6,6 +6,8 @@ from great_expectations.checkpoint import SimpleCheckpoint
 from great_expectations.data_context.data_context import DataContext
 import yaml
 from great_expectations.checkpoint import Checkpoint
+import json
+from great_expectations.core.expectation_suite import ExpectationSuite
 
 
 def main():
@@ -37,10 +39,20 @@ def main():
             st.write(context)
             with open("gx/checkpoints/fm_checkpoint_v1.yml", "r") as stream:
                 checkpoint_config = yaml.safe_load(stream)
+            with open(
+                "gx/expectations/freddie_mac_expectation_suite.json", "r"
+            ) as file:
+                suite_data = json.load(file)
+
+            # Convert the dictionary to an ExpectationSuite
+            suite = ExpectationSuite.from_dict(suite_data)
+
+            # Add the suite to the context
+            context.save_expectation_suite(suite, "freddie_mac_expectation_suite")
 
             # Add the checkpoint to the DataContext
             context.add_checkpoint(**checkpoint_config)
-
+            context.add_expectation_suite()
             # To verify
 
             available_checkpoints = context.list_checkpoints()
