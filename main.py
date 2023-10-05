@@ -59,7 +59,7 @@ def main():
             # Add expectation to default suite
             gv.add_expectation_to_default_suite(context)
             results = gv.validate_dataframe(df)
-            st.write(results)
+            st.write(results + "congratulations!")
 
 
 if __name__ == "__main__":
