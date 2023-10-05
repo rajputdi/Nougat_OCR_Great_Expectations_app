@@ -6,7 +6,6 @@ from great_expectations.data_context.types.base import (
     InMemoryStoreBackendDefaults,
 )
 from great_expectations.data_context import EphemeralDataContext
-from great_expectations.core.batch import BatchRequest
 
 
 def initialize_ge_context():
@@ -18,32 +17,21 @@ def initialize_ge_context():
 
 
 def add_expectations_to_default_suite(context, df):
-    # Convert the pandas df into a GE batch
-    batch_request = BatchRequest(
-        datasource_name="memory",
-        data_connector_name="default_inferred_data_connector_name",
-        data_asset_name="default_name",
-        batch_data=df,
-    )
-    batch = context.get_batch(batch_request)
+    # Retrieve the default suite
+    suite = context.get_expectation_suite("default")
 
-    # Create an empty suite or get an existing suite
-    suite = context.create_expectation_suite(
-        expectation_suite_name="default", overwrite_existing=True
+    # Convert df into a GE dataset
+    ge_df = ge.from_pandas(df)
+    ge_df.set_default_expectation_argument("result_format", "BASIC")
+
+    # Add an example expectation: expecting the "Credit Score" column values to be between 300 and 850
+    ge_df.expect_column_values_to_be_between(
+        "Credit Score", min_value=300, max_value=850
     )
 
-    # Now, let's add some expectations
-    batch.expect_column_to_exist("Credit Score")
-    # ... add other expectations ...
-
-    # Save the expectations
-    context.save_expectation_suite(suite, "default")
-
-    # Validate the dataframe
-    results = context.run_validation_operator(
-        "action_list_operator", assets_to_validate=[batch]
-    )
-    return results
+    # Save the updated suite back to the context
+    context.save_expectation_suite(suite)
+    return suite
 
 
 def validate_dataframe(df):
