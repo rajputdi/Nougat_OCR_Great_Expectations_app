@@ -52,7 +52,6 @@ def main():
 
             # Add the checkpoint to the DataContext
             context.add_checkpoint(**checkpoint_config)
-            context.add_expectation_suite()
             # To verify
 
             available_checkpoints = context.list_checkpoints()
