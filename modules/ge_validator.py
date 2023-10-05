@@ -17,23 +17,20 @@ def initialize_ge_context():
 
 
 def add_expectations_to_default_suite(context, df):
-    """
-    Add an expectation for the "Credit Score" column to the default suite.
-    """
-    # Load the default expectation suite
-    suite = context.get_expectation_suite()
+    # Retrieve the default suite
+    suite = context.get_expectation_suite(suite_name="default")
 
-    # Add the expectation for the "Credit Score" column
-    suite.add_expectation(
-        {
-            "expectation_type": "expect_column_values_to_be_between",
-            "kwargs": {"column": "Credit Score", "min_value": 300, "max_value": 850},
-        }
+    # Convert df into a GE dataset
+    ge_df = ge.from_pandas(df)
+    ge_df.set_default_expectation_argument("result_format", "BASIC")
+
+    # Add an example expectation: expecting the "Credit Score" column values to be between 300 and 850
+    ge_df.expect_column_values_to_be_between(
+        "Credit Score", min_value=300, max_value=850
     )
 
-    # Save the updated expectation suite back to the context
+    # Save the updated suite back to the context
     context.save_expectation_suite(suite)
-
     return suite
 
 
