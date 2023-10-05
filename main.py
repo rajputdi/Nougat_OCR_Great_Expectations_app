@@ -2,6 +2,8 @@ import streamlit as st
 from modules import Uploader, data_processor, ge_validator as gv
 from ydata_profiling import ProfileReport
 import great_expectations as ge
+from great_expectations.checkpoint import SimpleCheckpoint
+from great_expectations.data_context.data_context import DataContext
 
 
 def main():
@@ -40,6 +42,10 @@ def main():
             report = ProfileReport(
                 df, title="Data Summary using ydata-profiling", minimal=True
             )
+        if st.button("Run Checkpoint"):
+            context = DataContext("great_expectations")
+            results = gv.run_checkpoint_on_df(df, context)
+            st.write(results)
 
 
 if __name__ == "__main__":
