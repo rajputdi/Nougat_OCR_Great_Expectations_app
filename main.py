@@ -54,6 +54,8 @@ def main():
             context.add_checkpoint(**checkpoint_config)
             # To verify
 
+            ge_df = ge.dataset.PandasDataset(df)
+
             available_checkpoints = context.list_checkpoints()
             st.write(available_checkpoints)
 
@@ -64,17 +66,17 @@ def main():
             st.write(retrieved_checkpoint)
 
             suite = context.get_expectation_suite("freddie_mac_expectation_suite")
+            st.write(ge_df.head())
             results = ge_df.validate(expectation_suite=suite)
 
-            ge_df = ge.dataset.PandasDataset(df)
-            results = context.run_checkpoint(
-                checkpoint_name="fm_checkpoint_v1",
-                batch_request={
-                    "batch_data": ge_df,
-                    "datasource_name": "my_pandas_datasource1",
-                    "data_asset_name": "fm_dataframe",
-                },
-            )
+            # results = context.run_checkpoint(
+            #     checkpoint_name="fm_checkpoint_v1",
+            #     batch_request={
+            #         "batch_data": ge_df,
+            #         "datasource_name": "my_pandas_datasource1",
+            #         "data_asset_name": "fm_dataframe",
+            #     },
+            # )
             st.write(results)
 
 
