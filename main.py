@@ -46,7 +46,7 @@ def main():
 
             # Convert the dictionary to an ExpectationSuite
             suite = ExpectationSuite(suite_data)
-
+            st.write("expectation suit loaded from git: " + suite)
             # Add the suite to the context
             context.save_expectation_suite(suite, "freddie_mac_expectation_suite")
 
