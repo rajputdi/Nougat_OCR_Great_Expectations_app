@@ -5,6 +5,7 @@ import great_expectations as ge
 from great_expectations.checkpoint import SimpleCheckpoint
 from great_expectations.data_context.data_context import DataContext
 import yaml
+from great_expectations.checkpoint import Checkpoint
 
 
 def main():
@@ -44,8 +45,12 @@ def main():
 
             available_checkpoints = context.list_checkpoints()
             st.write(available_checkpoints)
-            # results = gv.run_checkpoint_on_df(df, context)
-            # st.write(results)
+
+            checkpoint = Checkpoint(
+                name="fm_checkpoint_v1", data_context=context, **checkpoint_config
+            )
+            results = gv.run_checkpoint_on_df(df, context)
+            st.write(results)
 
 
 if __name__ == "__main__":
