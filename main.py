@@ -58,8 +58,16 @@ def main():
 
             # Add expectation to default suite
             gv.add_expectation_to_default_suite(context)
+
             results = gv.validate_dataframe(df)
             st.write(results + "congratulations!")
+
+            # After adding expectation
+
+            validation_results = gv.validate_data_against_suite(context, ge_df)
+
+            # Display the results in your Streamlit app
+            st.json(validation_results)
 
 
 if __name__ == "__main__":

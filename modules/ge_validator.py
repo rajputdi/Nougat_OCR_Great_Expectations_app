@@ -55,4 +55,12 @@ def validate_dataframe(df):
     return results
 
 
+def validate_data_against_suite(context, ge_df):
+    """
+    Validate the provided Great Expectations dataframe against the default suite.
+    """
+    results = ge_df.validate(expectation_suite=context.get_expectation_suite())
+    return results
+
+
 # ... You can add more functions or helpers here if needed
