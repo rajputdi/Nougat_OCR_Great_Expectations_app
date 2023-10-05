@@ -51,14 +51,10 @@ def main():
         # st.write(validation_results, "/n")
         # st.write(expectation_result, "/n")
 
-        # Setup GE
-        context = gv.get_in_memory_data_context()
-
-        # Validate
-        results = gv.validate_dataframe(df, context)
-
-        # Display results
-        st.write(results)
+        # Validate the dataframe using GE and display results
+        if st.button("Validate Data"):
+            results = gv.validate_dataframe(df)
+            st.write(results)
 
 
 if __name__ == "__main__":
