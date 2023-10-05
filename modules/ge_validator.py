@@ -11,6 +11,6 @@ def run_checkpoint_on_df(df, context):
 
     # Run the checkpoint
     results = context.run_checkpoint(
-        checkpoint_name="fm_checkpoint_v1", batch_request={"batch_data": ge_df}
+        checkpoint_name="fm_checkpoint_v1.yml", batch_request={"batch_data": ge_df}
     )
     return results
