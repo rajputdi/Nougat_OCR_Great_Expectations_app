@@ -4,6 +4,7 @@ from ydata_profiling import ProfileReport
 import great_expectations as ge
 from great_expectations.checkpoint import SimpleCheckpoint
 from great_expectations.data_context.data_context import DataContext
+import yaml
 
 
 def main():
@@ -33,6 +34,14 @@ def main():
         if st.button("Run Checkpoint"):
             context = DataContext("gx")
             st.write(context)
+            with open("gx/checkpoints/fm_checkpoint_v1.yml", "r") as stream:
+                checkpoint_config = yaml.safe_load(stream)
+
+            # Add the checkpoint to the DataContext
+            context.add_checkpoint(**checkpoint_config)
+
+            # To verify
+
             available_checkpoints = context.list_checkpoints()
             st.write(available_checkpoints)
             # results = gv.run_checkpoint_on_df(df, context)
