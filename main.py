@@ -21,7 +21,7 @@ def main():
         ge_df = ge.from_pandas(df)
 
         # Initialize the in-memory GE context
-        context = gv.initialize_ge_context()
+        context = gv.EphemeralDataContext()
 
         # Add expectations
         gv.add_expectations_to_default_suite(context, ge_df)
