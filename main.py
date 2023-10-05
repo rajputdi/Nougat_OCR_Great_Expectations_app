@@ -32,8 +32,9 @@ def main():
             )
         if st.button("Run Checkpoint"):
             context = DataContext("gx")
-            results = gv.run_checkpoint_on_df(df, context)
-            st.write(results)
+            st.write(context)
+            # results = gv.run_checkpoint_on_df(df, context)
+            # st.write(results)
 
 
 if __name__ == "__main__":
