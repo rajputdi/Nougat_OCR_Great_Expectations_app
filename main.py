@@ -1,6 +1,7 @@
 import streamlit as st
 from modules import Uploader, data_processor, data_validator as dv, data_exporter
 import great_expectations as ge
+from modules import ge_validator as gv
 
 # ... other imports ...
 
@@ -48,7 +49,16 @@ def main():
             st.write("Dataframe validation failed!")
             st.write(expectation_result, "\n")
         # st.write(validation_results, "/n")
-    # st.write(expectation_result, "/n")
+        # st.write(expectation_result, "/n")
+
+        # Setup GE
+        context = gv.get_in_memory_data_context()
+
+        # Validate
+        results = gv.validate_dataframe(df, context)
+
+        # Display results
+        st.write(results)
 
 
 if __name__ == "__main__":
