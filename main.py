@@ -31,16 +31,18 @@ def main():
         # Display the dataframe (Top 50 rows) if the "View Data" button is clicked
         if st.button("View Data"):
             st.dataframe(df.head(50))
+
         if st.button("Generate Data Summary"):
-            # Generate the report
-            if report_type == "Origination Report":
-                title_for_report = "Origination"
-            else:
-                title_for_report = "Monthly Performance"
-            report = ProfileReport(
-                df,
-                title=f"Data Summary using ydata-profiling {title_for_report}",
-                minimal=True,
+            with st.spinner("Generating report..."):
+                report = data_processor.generate_profiling_report(df, report_type)
+            html = report.to_html()
+            st.success("Report generated!")
+
+            st.download_button(
+                label="Download Data Summary Report",
+                data=html.encode("utf-8"),
+                file_name="data_summary.html",
+                mime="text/html",
             )
 
         if st.button("Run Checkpoint"):

@@ -85,6 +85,8 @@ def process_txt(file, report_type):
     return df
 
 
-def generate_profiling_report(df):
-    report = ProfileReport(df, title="Data Summary using ydata-profiling", minimal=True)
+def generate_profiling_report(df, report_type):
+    report = ProfileReport(
+        df, title=f"Data Summary using ydata-profiling {report_type}", minimal=True
+    )
     return report
