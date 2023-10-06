@@ -23,6 +23,10 @@ def main():
         "Choose type of report", ["Origination Report", "Monthly Performance Report"]
     )
 
+    link_label = "Want to know more about the dataset? Click me!"
+    link_url = "chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.freddiemac.com/fmac-resources/research/pdf/user_guide.pdf"
+    st.markdown(f"[{link_label}]({link_url})")
+
     if uploaded_file:
         df = data_processor.process_txt(uploaded_file, report_type)
 
