@@ -113,20 +113,20 @@ def main():
             checkpoint_result = checkpoint.run(run_name="manual_run_1")
             st.write(checkpoint_result)
 
-            context.build_data_docs()
-            data_docs_path = "gx/uncommitted/data_docs/local_site/index.html"
+            st.write(context.build_data_docs())
+        #     data_docs_path = "gx/uncommitted/data_docs/local_site/index.html"
 
-            with open(data_docs_path, "r", encoding="utf-8") as file:
-                html_content = file.read()
+        #     with open(data_docs_path, "r", encoding="utf-8") as file:
+        #         html_content = file.read()
 
-            st.download_button(
-                label="Download Data Docs",
-                data=html_content,
-                file_name="data_docs.html",
-                mime="text/html",
-            )
-        else:
-            st.write("Data docs have not been generated yet.")
+        #     st.download_button(
+        #         label="Download Data Docs",
+        #         data=html_content,
+        #         file_name="data_docs.html",
+        #         mime="text/html",
+        #     )
+        # else:
+        #     st.write("Data docs have not been generated yet.")
 
 
 if __name__ == "__main__":
