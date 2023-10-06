@@ -46,21 +46,38 @@ def main():
             )
 
         if st.button("Run Checkpoint"):
-            context = DataContext("gx")
-            st.write(context)
-            # st.write(context.get_expectation_suite("freddie_mac_expectation_suite"))
+            # Replace this URL with the raw URL of your Expectation Suite in the GitHub repository.
+            GITHUB_RAW_URL = "https://raw.githubusercontent.com/rajputdi/test_repo/main/gx/expectations/freddie_mac_expectation_suite.json"
 
-            # Point directly to the great_expectations.yml within the gx directory
-            ge_config_path = "rajputdi/test_repo/main/gx/great_expectations.yml"
-            context1 = DataContext(ge_config_path)
-            st.write(context1)
+            response = requests.get(GITHUB_RAW_URL)
+            if response.status_code == 200:
+                expectation_suite = response.json()
+            else:
+                raise ValueError("Failed to fetch the expectation suite from GitHub.")
 
-            # def diagnostic_print_ge_directory(ge_directory_path):
-            #     for root, dirs, files in os.walk(ge_directory_path):
-            #         for file in files:
-            #             print(os.path.join(root, file))
+            # Convert the dictionary back to an ExpectationSuite object
+            suite_obj = ExpectationSuite(**expectation_suite)
+            # Now, set this suite to your ge_df
+            ge_df._expectation_suite = suite_obj
+            results = ge_df.validate()
 
-            # diagnostic_print_ge_directory("gx")
+            st.write(results)
+
+        # context = DataContext("gx")
+        # st.write(context)
+        # # st.write(context.get_expectation_suite("freddie_mac_expectation_suite"))
+
+        # # Point directly to the great_expectations.yml within the gx directory
+        # ge_config_path = "rajputdi/test_repo/main/gx/great_expectations.yml"
+        # context1 = DataContext(ge_config_path)
+        # st.write(context1)
+
+        # def diagnostic_print_ge_directory(ge_directory_path):
+        #     for root, dirs, files in os.walk(ge_directory_path):
+        #         for file in files:
+        #             print(os.path.join(root, file))
+
+        # diagnostic_print_ge_directory("gx")
 
         #     # with open("gx/checkpoints/fm_checkpoint_v1.yml", "r") as stream:
         #     #     checkpoint_config = yaml.safe_load(stream)
