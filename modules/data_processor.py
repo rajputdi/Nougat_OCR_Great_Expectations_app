@@ -4,6 +4,18 @@ from ydata_profiling import ProfileReport
 
 
 def process_txt(file, report_type):
+    if file is not None:
+        file_content = file.read().decode("utf-8")
+    delimiter_count = file_content.count("|")
+
+    if delimiter_count != 31:
+        st.error(
+            f"The uploaded file has {delimiter_count} '|' delimiters. It should have 31 for 32 columns!"
+        )
+    else:
+        # Proceed with further processing if needed
+        st.write("File looks good!")
+
     # Define column names based on the report type
     if report_type == "Origination Report":
         column_names = column_names = [
