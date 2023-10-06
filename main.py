@@ -48,7 +48,7 @@ def main():
             suite = ExpectationSuite(suite_data)
             st.write(suite)
             # Add the suite to the context
-            context.save_expectation_suite(suite, "freddie_mac_expectation_suite")
+            context.save_expectation_suite(suite)
 
             # Add the checkpoint to the DataContext
             context.add_checkpoint(**checkpoint_config)
