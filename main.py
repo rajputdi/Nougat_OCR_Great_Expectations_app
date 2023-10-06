@@ -111,6 +111,7 @@ def main():
                 ],
             )
             checkpoint_result = checkpoint.run(run_name="manual_run_1")
+            st.write(checkpoint_result)
 
 
 if __name__ == "__main__":
