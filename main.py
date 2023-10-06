@@ -36,12 +36,12 @@ def main():
         if st.button("Generate Data Summary"):
             with st.spinner("Generating report..."):
                 report = data_processor.generate_profiling_report(df, report_type)
-            html = report.to_html()
+            html1 = report.to_html()
             st.success("Report generated!")
 
             st.download_button(
                 label="Download Data Summary Report",
-                data=html.encode("utf-8"),
+                data=html1.encode("utf-8"),
                 file_name="data_summary.html",
                 mime="text/html",
             )
