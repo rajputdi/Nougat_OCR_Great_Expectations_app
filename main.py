@@ -83,6 +83,7 @@ def main():
             suite_json = response.json()
 
             suite1 = ExpectationSuite(suite_json)
+            st.write(suite1)
             results_exp = ge_df.validate(expectation_suite=suite1)
 
             # results = context.run_checkpoint(
