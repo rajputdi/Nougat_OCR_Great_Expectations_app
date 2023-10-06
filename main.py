@@ -51,7 +51,7 @@ def main():
             # st.write(context.get_expectation_suite("freddie_mac_expectation_suite"))
 
             # Point directly to the great_expectations.yml within the gx directory
-            ge_config_path = "gx/great_expectations.yml"
+            ge_config_path = "rajputdi/test_repo/main/gx/great_expectations.yml"
             context1 = DataContext(ge_config_path)
             st.write(context1)
 
