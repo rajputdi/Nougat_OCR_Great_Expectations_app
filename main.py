@@ -61,28 +61,52 @@ def main():
             # Now, set this suite to your ge_df
             ge_df._expectation_suite = suite_obj
             results = ge_df.validate()
-            # Convert the ValidationResult to a dictionary.
-            results_dict = results.to_json_dict()
-            # Convert the results to a prettified JSON string.
-            pretty_json_str = json.dumps(results_dict, indent=4)
+            pretty_json_str = json.dumps(results.to_json_dict(), indent=4)
 
-            # Escape any HTML-specific characters.
-            escaped_html_content = html.escape(pretty_json_str)
+            # Embed the JSON in an HTML template.
+            html_content = f"""
+            <html>
+            <head>
+            <title>Validation Results</title>
+            </head>
+            <body>
+            <pre>{pretty_json_str}</pre>
+            </body>
+            </html>
+            """
 
-            # Convert the escaped string to a formatted HTML.
-            html_content = f"<pre>{escaped_html_content}</pre>"
-            # Add a button to allow users to download the HTML content.
-            if st.button("Download HTML"):
-                # Convert the HTML content into a bytes-like object.
-                b_content = bytes(html_content, encoding="utf-8")
+            # Convert the HTML content to bytes.
+            b_content = bytes(html_content, "utf-8")
 
-            # Provide a download link for the content.
+            # Streamlit button for download.
             st.download_button(
                 "Download Validation Result",
                 b_content,
                 file_name="results.html",
                 mime="text/html",
             )
+            # # Convert the ValidationResult to a dictionary.
+            # results_dict = results.to_json_dict()
+            # # Convert the results to a prettified JSON string.
+            # pretty_json_str = json.dumps(results_dict, indent=4)
+
+            # # Escape any HTML-specific characters.
+            # escaped_html_content = html.escape(pretty_json_str)
+
+            # # Convert the escaped string to a formatted HTML.
+            # html_content = f"<pre>{escaped_html_content}</pre>"
+            # # Add a button to allow users to download the HTML content.
+            # if st.button("Download HTML"):
+            #     # Convert the HTML content into a bytes-like object.
+            #     b_content = bytes(html_content, encoding="utf-8")
+
+            # # Provide a download link for the content.
+            # st.download_button(
+            #     "Download Validation Result",
+            #     b_content,
+            #     file_name="results.html",
+            #     mime="text/html",
+            # )
             # st.write(results)
 
         # context = DataContext("gx")
