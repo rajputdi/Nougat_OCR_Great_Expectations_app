@@ -66,11 +66,11 @@ def main():
             st.write(retrieved_checkpoint)
 
             retrieved_suite = context.get_expectation_suite(
-                "freddie_mac_expectation_suite"
+                "ExpectationSuiteIdentifier::fred"
             )
             st.write(retrieved_suite)
 
-            suite = context.get_expectation_suite("freddie_mac_expectation_suite")
+            suite = context.get_expectation_suite("ExpectationSuiteIdentifier::fred")
             st.write(ge_df.head())
             results = ge_df.validate(expectation_suite=suite)
 
