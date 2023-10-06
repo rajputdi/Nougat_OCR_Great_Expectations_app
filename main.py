@@ -47,12 +47,12 @@ def main():
             # Convert the dictionary to an ExpectationSuite
             suite = ExpectationSuite(suite_data)
             st.write(suite)
-            # Add the suite to the context
-            context.save_expectation_suite(suite, "fred")
-
             # Add the checkpoint to the DataContext
             context.add_checkpoint(**checkpoint_config)
             # To verify
+
+            # Add the suite to the context
+            context.save_expectation_suite(suite, "freddie_mac_expectation_suite")
 
             ge_df = ge.dataset.PandasDataset(df)
 
@@ -65,10 +65,12 @@ def main():
             retrieved_checkpoint = context.get_checkpoint(name="fm_checkpoint_v1")
             st.write(retrieved_checkpoint)
 
-            retrieved_suite = context.get_expectation_suite("fred")
+            retrieved_suite = context.get_expectation_suite(
+                "freddie_mac_expectation_suite"
+            )
             st.write(retrieved_suite)
 
-            suite = context.get_expectation_suite("fred")
+            suite = context.get_expectation_suite("freddie_mac_expectation_suite")
             st.write(ge_df.head())
             results = ge_df.validate(expectation_suite=suite)
 
