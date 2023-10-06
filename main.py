@@ -47,6 +47,7 @@ def main():
 
         if st.button("Run Checkpoint"):
             context = DataContext("gx")
+            st.write(context)
             st.write(context.get_expectation_suite("freddie_mac_expectation_suite"))
         #     # with open("gx/checkpoints/fm_checkpoint_v1.yml", "r") as stream:
         #     #     checkpoint_config = yaml.safe_load(stream)
