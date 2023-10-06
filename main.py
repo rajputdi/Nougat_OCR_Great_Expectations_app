@@ -33,9 +33,16 @@ def main():
             st.dataframe(df.head(50))
         if st.button("Generate Data Summary"):
             # Generate the report
+            if report_type == "Origination Report":
+                title_for_report = "Origination"
+            else:
+                title_for_report = "Monthly Performance"
             report = ProfileReport(
-                df, title="Data Summary using ydata-profiling", minimal=True
+                df,
+                title=f"Data Summary using ydata-profiling {title_for_report}",
+                minimal=True,
             )
+
         if st.button("Run Checkpoint"):
             context = DataContext("gx")
             st.write(context)
@@ -113,7 +120,6 @@ def main():
             checkpoint_result = checkpoint.run(run_name="manual_run_1")
             st.write(checkpoint_result)
 
-            st.write(context.build_data_docs())
         #     data_docs_path = "gx/uncommitted/data_docs/local_site/index.html"
 
         #     with open(data_docs_path, "r", encoding="utf-8") as file:
