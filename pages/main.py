@@ -53,7 +53,7 @@ def main():
             if report_type == "Origination Report":
                 GITHUB_RAW_URL = "https://raw.githubusercontent.com/rajputdi/test_repo/main/gx/expectations/freddie_mac_expectation_suite1.json"
             else:  # monthly performance expectation suite
-                GITHUB_RAW_URL = "https://raw.githubusercontent.com/rajputdi/test_repo/main/gx/expectations/freddie_mac_expectation_suite.json"
+                GITHUB_RAW_URL = "https://raw.githubusercontent.com/rajputdi/test_repo/main/gx/expectations/freddie_mac_expectation_suiteMP.json"
             response = requests.get(GITHUB_RAW_URL)
             if response.status_code == 200:
                 expectation_suite = response.json()
