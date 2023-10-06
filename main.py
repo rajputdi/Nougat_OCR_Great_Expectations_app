@@ -47,94 +47,94 @@ def main():
 
         if st.button("Run Checkpoint"):
             context = DataContext("gx")
-            st.write(context)
-            with open("gx/checkpoints/fm_checkpoint_v1.yml", "r") as stream:
-                checkpoint_config = yaml.safe_load(stream)
-            context.add_checkpoint(**checkpoint_config)
+            st.write(context.get_expectation_suite("freddie_mac_expectation_suite"))
+        #     # with open("gx/checkpoints/fm_checkpoint_v1.yml", "r") as stream:
+        #     #     checkpoint_config = yaml.safe_load(stream)
+        #     # context.add_checkpoint(**checkpoint_config)
 
-            with open(
-                "gx/expectations/freddie_mac_expectation_suite.json", "r"
-            ) as file:
-                suite_data = json.load(file)
+        #     # with open(
+        #     #     "gx/expectations/freddie_mac_expectation_suite.json", "r"
+        #     # ) as file:
+        #     #     suite_data = json.load(file)
 
-            # Convert the dictionary to an ExpectationSuite
-            suite = ExpectationSuite(suite_data)
-            st.write(suite)
-            # Add the checkpoint to the DataContext
-            # To verify
+        #     # Convert the dictionary to an ExpectationSuite
+        #     suite = ExpectationSuite(suite_data)
+        #     st.write(suite)
+        #     # Add the checkpoint to the DataContext
+        #     # To verify
 
-            # Add the suite to the context
-            context.save_expectation_suite(suite, "freddie_mac_expectation_suite")
+        #     # Add the suite to the context
+        #     context.save_expectation_suite(suite, "freddie_mac_expectation_suite")
 
-            ge_df = ge.dataset.PandasDataset(df)
+        #     ge_df = ge.dataset.PandasDataset(df)
 
-            available_checkpoints = context.list_checkpoints()
-            st.write(available_checkpoints)
+        #     available_checkpoints = context.list_checkpoints()
+        #     st.write(available_checkpoints)
 
-            available_suites = context.list_expectation_suites()
-            st.write(available_suites)
+        #     available_suites = context.list_expectation_suites()
+        #     st.write(available_suites)
 
-            retrieved_checkpoint = context.get_checkpoint(name="fm_checkpoint_v1")
-            st.write(retrieved_checkpoint)
+        #     retrieved_checkpoint = context.get_checkpoint(name="fm_checkpoint_v1")
+        #     st.write(retrieved_checkpoint)
 
-            retrieved_suite = context.get_expectation_suite(
-                "freddie_mac_expectation_suite"
-            )
-            st.write(retrieved_suite)
-
-            suite = context.get_expectation_suite("freddie_mac_expectation_suite")
-            st.write(ge_df.head())
-            results = ge_df.validate(expectation_suite=suite)
-
-            url = "https://raw.githubusercontent.com/rajputdi/test_repo/main/gx/expectations/freddie_mac_expectation_suite.json"
-
-            response = requests.get(url)
-            suite_json = response.json()
-
-            suite1 = ExpectationSuite(suite_json)
-            # st.write(suite1)
-
-            results_exp = ge_df.validate(expectation_suite=suite1)
-
-            # results = context.run_checkpoint(
-            #     checkpoint_name="fm_checkpoint_v1",
-            #     batch_request={
-            #         "batch_data": ge_df,
-            #         "datasource_name": "my_pandas_datasource1",
-            #         "data_asset_name": "fm_dataframe",
-            #     },
-            # )
-            st.write(results_exp)
-
-            datasource = context.sources.add_pandas(name="my_pandas_datasource2")
-            name = "fm_dataframe"
-            data_asset = datasource.add_dataframe_asset(name=name)
-            my_batch_request = data_asset.build_batch_request(dataframe=df)
-            checkpoint = context.add_or_update_checkpoint(
-                name="fm_checkpoint_v1",
-                validations=[
-                    {
-                        "batch_request": my_batch_request,
-                        "expectation_suite_name": "freddie_mac_expectation_suite",
-                    },
-                ],
-            )
-            checkpoint_result = checkpoint.run(run_name="manual_run_1")
-            st.write(checkpoint_result)
-
-        #     data_docs_path = "gx/uncommitted/data_docs/local_site/index.html"
-
-        #     with open(data_docs_path, "r", encoding="utf-8") as file:
-        #         html_content = file.read()
-
-        #     st.download_button(
-        #         label="Download Data Docs",
-        #         data=html_content,
-        #         file_name="data_docs.html",
-        #         mime="text/html",
+        #     retrieved_suite = context.get_expectation_suite(
+        #         "freddie_mac_expectation_suite"
         #     )
-        # else:
-        #     st.write("Data docs have not been generated yet.")
+        #     st.write(retrieved_suite)
+
+        #     suite = context.get_expectation_suite("freddie_mac_expectation_suite")
+        #     st.write(ge_df.head())
+        #     results = ge_df.validate(expectation_suite=suite)
+
+        #     url = "https://raw.githubusercontent.com/rajputdi/test_repo/main/gx/expectations/freddie_mac_expectation_suite.json"
+
+        #     response = requests.get(url)
+        #     suite_json = response.json()
+
+        #     suite1 = ExpectationSuite(suite_json)
+        #     # st.write(suite1)
+
+        #     results_exp = ge_df.validate(expectation_suite=suite1)
+
+        #     # results = context.run_checkpoint(
+        #     #     checkpoint_name="fm_checkpoint_v1",
+        #     #     batch_request={
+        #     #         "batch_data": ge_df,
+        #     #         "datasource_name": "my_pandas_datasource1",
+        #     #         "data_asset_name": "fm_dataframe",
+        #     #     },
+        #     # )
+        #     st.write(results_exp)
+
+        #     datasource = context.sources.add_pandas(name="my_pandas_datasource2")
+        #     name = "fm_dataframe"
+        #     data_asset = datasource.add_dataframe_asset(name=name)
+        #     my_batch_request = data_asset.build_batch_request(dataframe=df)
+        #     checkpoint = context.add_or_update_checkpoint(
+        #         name="fm_checkpoint_v1",
+        #         validations=[
+        #             {
+        #                 "batch_request": my_batch_request,
+        #                 "expectation_suite_name": "freddie_mac_expectation_suite",
+        #             },
+        #         ],
+        #     )
+        #     checkpoint_result = checkpoint.run(run_name="manual_run_1")
+        #     st.write(checkpoint_result)
+
+        # #     data_docs_path = "gx/uncommitted/data_docs/local_site/index.html"
+
+        # #     with open(data_docs_path, "r", encoding="utf-8") as file:
+        # #         html_content = file.read()
+
+        # #     st.download_button(
+        # #         label="Download Data Docs",
+        # #         data=html_content,
+        # #         file_name="data_docs.html",
+        # #         mime="text/html",
+        # #     )
+        # # else:
+        # #     st.write("Data docs have not been generated yet.")
 
 
 if __name__ == "__main__":
