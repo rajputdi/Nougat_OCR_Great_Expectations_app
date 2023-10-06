@@ -10,7 +10,7 @@ def process_txt(file, report_type):
 
     if delimiter_count != 31:
         st.error(
-            f"The uploaded file has {delimiter_count} '|' delimiters. It should have 31 for 32 columns!"
+            f"The uploaded file has {delimiter_count} '|' delimiters. INVALID SCHEMA. File should have 31 delimiters"
         )
     else:
         # Proceed with further processing if needed
