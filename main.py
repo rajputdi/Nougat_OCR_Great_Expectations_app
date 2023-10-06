@@ -10,6 +10,7 @@ import json
 from great_expectations.core.expectation_suite import ExpectationSuite
 import os
 import requests
+import html
 
 
 def main():
@@ -60,8 +61,27 @@ def main():
             # Now, set this suite to your ge_df
             ge_df._expectation_suite = suite_obj
             results = ge_df.validate()
+            # Convert the results to a prettified JSON string.
+            pretty_json_str = json.dumps(results, indent=4)
 
-            st.write(results)
+            # Escape any HTML-specific characters.
+            escaped_html_content = html.escape(pretty_json_str)
+
+            # Convert the escaped string to a formatted HTML.
+            html_content = f"<pre>{escaped_html_content}</pre>"
+            # Add a button to allow users to download the HTML content.
+            if st.button("Download HTML"):
+                # Convert the HTML content into a bytes-like object.
+                b_content = bytes(html_content, encoding="utf-8")
+
+            # Provide a download link for the content.
+            st.download_button(
+                "Download Validation Result",
+                b_content,
+                file_name="results.html",
+                mime="text/html",
+            )
+            # st.write(results)
 
         # context = DataContext("gx")
         # st.write(context)
