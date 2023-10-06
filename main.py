@@ -48,7 +48,7 @@ def main():
         if st.button("Run Checkpoint"):
             context = DataContext("gx")
             st.write(context)
-            st.write(context.get_expectation_suite("freddie_mac_expectation_suite"))
+            # st.write(context.get_expectation_suite("freddie_mac_expectation_suite"))
 
             def diagnostic_print_ge_directory(ge_directory_path):
                 for root, dirs, files in os.walk(ge_directory_path):
