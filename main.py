@@ -97,12 +97,12 @@ def main():
             # )
             st.write(results_exp)
 
-            datasource = context.sources.add_pandas(name="my_pandas_datasource1")
+            datasource = context.sources.add_pandas(name="my_pandas_datasource2")
             name = "fm_dataframe"
             data_asset = datasource.add_dataframe_asset(name=name)
             my_batch_request = data_asset.build_batch_request(dataframe=df)
             checkpoint = context.add_or_update_checkpoint(
-                name="checkpoint_fm_v1",
+                name="fm_checkpoint_v1",
                 validations=[
                     {
                         "batch_request": my_batch_request,
