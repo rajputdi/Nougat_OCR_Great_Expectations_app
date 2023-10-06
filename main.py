@@ -50,12 +50,17 @@ def main():
             st.write(context)
             # st.write(context.get_expectation_suite("freddie_mac_expectation_suite"))
 
-            def diagnostic_print_ge_directory(ge_directory_path):
-                for root, dirs, files in os.walk(ge_directory_path):
-                    for file in files:
-                        print(os.path.join(root, file))
+            # Point directly to the great_expectations.yml within the gx directory
+            ge_config_path = "gx/great_expectations.yml"
+            context1 = DataContext(ge_config_path)
+            st.write(context1)
 
-            diagnostic_print_ge_directory("gx")
+            # def diagnostic_print_ge_directory(ge_directory_path):
+            #     for root, dirs, files in os.walk(ge_directory_path):
+            #         for file in files:
+            #             print(os.path.join(root, file))
+
+            # diagnostic_print_ge_directory("gx")
 
         #     # with open("gx/checkpoints/fm_checkpoint_v1.yml", "r") as stream:
         #     #     checkpoint_config = yaml.safe_load(stream)
