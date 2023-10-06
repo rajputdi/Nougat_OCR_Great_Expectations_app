@@ -28,6 +28,7 @@ def main():
 
     if uploaded_file:
         df = data_processor.process_txt(uploaded_file, report_type)
+        st.write(df.shape[1])
         if df.shape[1] != 32:
             st.error("Invalid Schema of the Input file! No. of columns should be 32")
         else:
