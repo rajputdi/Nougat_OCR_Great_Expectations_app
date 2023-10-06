@@ -5,8 +5,8 @@ from ydata_profiling import ProfileReport
 
 def process_txt(file, report_type):
     if file is not None:
-        file_content = file.read().decode("utf-8")
-    delimiter_count = file_content.count("|")
+        file_content = file.readline().decode("utf-8")
+        delimiter_count = file_content.count("|")
 
     if delimiter_count != 31:
         st.error(
