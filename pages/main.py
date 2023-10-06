@@ -28,9 +28,11 @@ def main():
 
     if uploaded_file:
         df = data_processor.process_txt(uploaded_file, report_type)
-
-        # Convert the DataFrame to a GE dataset
-        ge_df = ge.from_pandas(df)
+        if df.shape[1] != 32:
+            st.error("Invalid Schema of the Input file! No. of columns should be 32")
+        else:
+            # Convert the DataFrame to a GE dataset
+            ge_df = ge.from_pandas(df)
 
         # Display the dataframe (Top 50 rows) if the "View Data" button is clicked
         if st.button("View Data"):
