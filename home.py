@@ -2,14 +2,9 @@ import streamlit as st
 from pages.main import main
 from pages.diagram import diagram
 
-# from pages.pdf_parsing import pdf_parsing
-# from pages.architecture import diagram
-
 
 def home():
-    import streamlit as st
-
-    st.title("DAMG 7245 - Assignment 01-Part 2")
+    st.title("DAMG 7245 - Assignment 01-Part 2-Team 4")
     st.sidebar.success("Select from the dropdown above☝")
 
 
@@ -19,5 +14,7 @@ page_names_to_funcs = {
     "Architecture": diagram,
 }
 
+# Place this line at the top, before any other Streamlit calls
 demo_name = st.sidebar.selectbox("Choose an option", page_names_to_funcs.keys())
+# Invoke the corresponding function
 page_names_to_funcs[demo_name]()
