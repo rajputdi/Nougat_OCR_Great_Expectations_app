@@ -113,6 +113,7 @@ def main():
             checkpoint_result = checkpoint.run(run_name="manual_run_1")
             st.write(checkpoint_result)
 
+            context.build_data_docs()
             data_docs_path = "gx/uncommitted/data_docs/local_site/index.html"
 
             # Check if the file exists
