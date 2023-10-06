@@ -9,6 +9,8 @@ from great_expectations.checkpoint import Checkpoint
 import json
 from great_expectations.core.expectation_suite import ExpectationSuite
 
+import requests
+
 
 def main():
     st.title("Streamlit App with Great Expectations")
@@ -73,6 +75,14 @@ def main():
 
             suite = context.get_expectation_suite("freddie_mac_expectation_suite")
             st.write(ge_df.head())
+            results = ge_df.validate(expectation_suite=suite)
+
+            url = "https://raw.githubusercontent.com/rajputdi/test_repo/main/gx/expectations/freddie_mac_expectation_suite.json"
+
+            response = requests.get(url)
+            suite_json = response.json()
+
+            suite = ExpectationSuite(suite_json)
             results = ge_df.validate(expectation_suite=suite)
 
             # results = context.run_checkpoint(
