@@ -116,10 +116,8 @@ def main():
             context.build_data_docs()
             data_docs_path = "gx/uncommitted/data_docs/local_site/index.html"
 
-            # Check if the file exists
-            if os.path.exists(data_docs_path):
-                with open(data_docs_path, "r", encoding="utf-8") as file:
-                    html_content = file.read()
+            with open(data_docs_path, "r", encoding="utf-8") as file:
+                html_content = file.read()
 
             st.download_button(
                 label="Download Data Docs",
