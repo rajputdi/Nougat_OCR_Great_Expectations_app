@@ -39,6 +39,8 @@ def main():
             st.write(context)
             with open("gx/checkpoints/fm_checkpoint_v1.yml", "r") as stream:
                 checkpoint_config = yaml.safe_load(stream)
+            context.add_checkpoint(**checkpoint_config)
+
             with open(
                 "gx/expectations/freddie_mac_expectation_suite.json", "r"
             ) as file:
@@ -48,7 +50,6 @@ def main():
             suite = ExpectationSuite(suite_data)
             st.write(suite)
             # Add the checkpoint to the DataContext
-            context.add_checkpoint(**checkpoint_config)
             # To verify
 
             # Add the suite to the context
