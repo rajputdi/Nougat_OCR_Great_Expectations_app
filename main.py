@@ -8,7 +8,7 @@ import yaml
 from great_expectations.checkpoint import Checkpoint
 import json
 from great_expectations.core.expectation_suite import ExpectationSuite
-
+import os
 import requests
 
 
@@ -112,6 +112,22 @@ def main():
             )
             checkpoint_result = checkpoint.run(run_name="manual_run_1")
             st.write(checkpoint_result)
+
+            data_docs_path = "gx/uncommitted/data_docs/local_site/index.html"
+
+            # Check if the file exists
+            if os.path.exists(data_docs_path):
+                with open(data_docs_path, "r", encoding="utf-8") as file:
+                    html_content = file.read()
+
+            st.download_button(
+                label="Download Data Docs",
+                data=html_content,
+                file_name="data_docs.html",
+                mime="text/html",
+            )
+        else:
+            st.write("Data docs have not been generated yet.")
 
 
 if __name__ == "__main__":
