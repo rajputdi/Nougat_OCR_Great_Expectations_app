@@ -82,8 +82,8 @@ def main():
             response = requests.get(url)
             suite_json = response.json()
 
-            suite = ExpectationSuite(suite_json)
-            results = ge_df.validate(expectation_suite=suite)
+            suite1 = ExpectationSuite(suite_json)
+            results_exp = ge_df.validate(expectation_suite=suite1)
 
             # results = context.run_checkpoint(
             #     checkpoint_name="fm_checkpoint_v1",
@@ -93,7 +93,7 @@ def main():
             #         "data_asset_name": "fm_dataframe",
             #     },
             # )
-            st.write(results)
+            st.write(results_exp)
 
 
 if __name__ == "__main__":
