@@ -61,8 +61,10 @@ def main():
             # Now, set this suite to your ge_df
             ge_df._expectation_suite = suite_obj
             results = ge_df.validate()
+            # Convert the ValidationResult to a dictionary.
+            results_dict = results.to_json_dict()
             # Convert the results to a prettified JSON string.
-            pretty_json_str = json.dumps(results, indent=4)
+            pretty_json_str = json.dumps(results_dict, indent=4)
 
             # Escape any HTML-specific characters.
             escaped_html_content = html.escape(pretty_json_str)
