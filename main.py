@@ -84,6 +84,7 @@ def main():
 
             suite1 = ExpectationSuite(suite_json)
             # st.write(suite1)
+
             results_exp = ge_df.validate(expectation_suite=suite1)
 
             # results = context.run_checkpoint(
@@ -95,6 +96,21 @@ def main():
             #     },
             # )
             st.write(results_exp)
+
+            datasource = context.sources.add_pandas(name="my_pandas_datasource1")
+            name = "fm_dataframe"
+            data_asset = datasource.add_dataframe_asset(name=name)
+            my_batch_request = data_asset.build_batch_request(dataframe=df)
+            checkpoint = context.add_or_update_checkpoint(
+                name="checkpoint_fm_v1",
+                validations=[
+                    {
+                        "batch_request": my_batch_request,
+                        "expectation_suite_name": "freddie_mac_expectation_suite",
+                    },
+                ],
+            )
+            checkpoint_result = checkpoint.run(run_name="manual_run_1")
 
 
 if __name__ == "__main__":
